@@ -1,0 +1,15 @@
+version: "3"
+services:
+  cache:
+    image: redis:latest
+  database:
+    image: mongo:3.6-stretch
+  application:
+    build: ./docker/application
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - 8080:8080
+    links:
+      - database
+      - cache

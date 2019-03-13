@@ -1,0 +1,211 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Coding Dojo API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8080",
+      "description": "Localhost API"
+    }
+  ],
+  "paths": {
+    "/planet": {
+      "get": {
+        "summary": "Paginated list all planets",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "name",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by like a name"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page indication"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Maximum data per request"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A JSON array of planets and pagination references",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "planets": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "terrain": {
+                            "type": "string"
+                          },
+                          "climate": {
+                            "type": "string"
+                          },
+                          "totalAppearances": {
+                            "type": "integer"
+                          },
+                          "imageUrl": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "limit": {
+                      "type": "integer"
+                    },
+                    "total": {
+                      "type": "integer"
+                    },
+                    "pages": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Register a new planet",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "terrain": {
+                    "type": "string"
+                  },
+                  "climate": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "When some required field has not found"
+          },
+          "500": {
+            "description": "When application fails to save planet"
+          },
+          "201": {
+            "description": "When planet is save successful"
+          }
+        }
+      }
+    },
+    "/planet/{planetId}": {
+      "get": {
+        "summary": "Get a specific planet",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "planetId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Planet identifier"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "When the planet specified not found"
+          },
+          "201": {
+            "description": "When the planet specified has been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "terrain": {
+                      "type": "string"
+                    },
+                    "climate": {
+                      "type": "string"
+                    },
+                    "totalAppearances": {
+                      "type": "integer"
+                    },
+                    "imageUrl": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Exclude a specific planet",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "planetId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Planet identifier"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "When the planet specified not found"
+          },
+          "204": {
+            "description": "When the planet specified has been removed"
+          }
+        }
+      }
+    }
+  }
+}
